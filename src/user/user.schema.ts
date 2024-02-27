@@ -10,22 +10,21 @@ export class User {
     login: string;
 
     @Prop({ required: true, unique: true, index: true })
-    email: number;
+    email: string;
 
     @Prop({ required: true })
     password: string;
 
-    @Prop({ required: true })
-    createdAt: string;
+    @Prop({ required: true, default: () => Date.now() }) // Use a function to get the default value
+    createdAt: Date;
 
     hashPassword(password: string) {
-        console.log('hash passwordd', password);
+        return password + '-hash';
     }
 
     static createSuperUser(userDto: RegistrationUserDto, UserModel: UserModelType): UserDocument {
         const createdUser: UserDocument = new UserModel(userDto);
-
-        createdUser.hashPassword(createdUser.password);
+        createdUser.password = createdUser.hashPassword(createdUser.password);
         return createdUser;
     }
 }
@@ -33,7 +32,7 @@ export class User {
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.methods = {
-    setAge: User.prototype.hashPassword,
+    hashPassword: User.prototype.hashPassword,
 };
 
 //statics methods

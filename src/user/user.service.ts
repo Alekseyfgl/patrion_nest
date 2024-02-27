@@ -7,7 +7,6 @@ export class UserService {
     constructor(protected userRepository: UserRepository) {}
 
     async create(dto: RegistrationUserDto) {
-        console.log(dto);
         return this.userRepository.create(dto);
     }
 

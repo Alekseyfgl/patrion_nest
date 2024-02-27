@@ -11,13 +11,15 @@ export class UserRepository {
     ) {}
 
     async create(userDto: RegistrationUserDto): Promise<UserDocument> {
+        // Call the static method directly on the model
         const superUser: UserDocument = this.UserModel.createSuperUser(userDto, this.UserModel);
-
+        // Save the super user to the database
         return this.save(superUser);
     }
 
     async save(user: UserDocument): Promise<UserDocument> {
-        return user.save();
+        // Use the create method provided by Mongoose to save the document
+        return this.UserModel.create(user);
     }
 
     async findAll(): Promise<UserDocument[]> {
