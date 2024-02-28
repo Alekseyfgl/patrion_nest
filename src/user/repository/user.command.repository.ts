@@ -12,7 +12,7 @@ export class UserCommandRepository {
 
     async create(userDto: RegistrationUserDto): Promise<UserDocument> {
         // Call the static method directly on the model
-        const superUser: UserDocument = this.UserModel.createSuperUser(userDto, this.UserModel);
+        const superUser: UserDocument = await this.UserModel.createSuperUser(userDto, this.UserModel);
         // Save the super user to the database
         return this.save(superUser);
     }

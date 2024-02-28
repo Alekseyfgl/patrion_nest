@@ -1,6 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
 import { RegistrationUserDto } from './interfeces/input';
+import bcrypt from 'bcrypt';
+import configDotenv from 'dotenv';
+
+configDotenv.config();
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -18,13 +22,15 @@ export class User {
     @Prop({ required: true, default: () => Date.now() }) // Use a function to get the default value
     createdAt: Date;
 
-    hashPassword(password: string) {
-        return password + '-hash';
+    async hashPassword(password: string): Promise<string> {
+        return bcrypt.hash(password, +(process.env.SALT_ROUNDS as string));
     }
 
-    static createSuperUser(userDto: RegistrationUserDto, UserModel: UserModelType): UserDocument {
+    static async createSuperUser(userDto: RegistrationUserDto, UserModel: UserModelType): Promise<UserDocument> {
         const createdUser: UserDocument = new UserModel(userDto);
-        createdUser.password = createdUser.hashPassword(createdUser.password);
+
+        const hashedPassword = await createdUser.hashPassword(createdUser.password);
+        createdUser.password = hashedPassword;
         return createdUser;
     }
 }
