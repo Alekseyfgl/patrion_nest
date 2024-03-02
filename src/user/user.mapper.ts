@@ -23,7 +23,7 @@
 //
 import { UserPaginationQuery, UserPaginationQueryOptional } from './interfeces/input';
 import { UserDocument } from './user.schema';
-import { IUserPaginationOut } from './interfeces/output';
+import { IUser, IUserPaginationOut } from './interfeces/output';
 
 export const createFilterGetAllUsersMapper = (query: UserPaginationQueryOptional): UserPaginationQuery => {
     return {
@@ -70,3 +70,12 @@ export const pageUsersMapper = (data: { totalCount: number; pagesCount: number; 
 //         createdAt: user.createdAt,
 //     };
 // };
+
+export const userMapper = (user: UserDocument): IUser => {
+    return {
+        id: user.id,
+        email: user.email,
+        login: user.login,
+        createdAt: user.createdAt.toISOString(),
+    };
+};
