@@ -13,6 +13,8 @@ import { TestRepository } from './test/test.repository';
 import { Blog, BlogSchema } from './blog/blog.schema';
 import { BlogService } from './blog/blog.service';
 import { BlogCommandRepository } from './blog/repository/blog.command.repository';
+import { BlogController } from './blog/blog.controller';
+import { BlogQueryRepository } from './blog/repository/blog.query.repository';
 
 @Module({
     imports: [
@@ -27,7 +29,7 @@ import { BlogCommandRepository } from './blog/repository/blog.command.repository
             { name: Blog.name, schema: BlogSchema },
         ]),
     ],
-    controllers: [UserController, TestController],
-    providers: [UserService, BlogService, BlogCommandRepository, UserQueryRepository, UserCommandRepository, CatsRepository, TestRepository],
+    controllers: [UserController, BlogController, TestController],
+    providers: [UserService, BlogService, BlogCommandRepository, BlogQueryRepository, UserQueryRepository, UserCommandRepository, CatsRepository, TestRepository],
 })
 export class AppModule {}

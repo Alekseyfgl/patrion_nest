@@ -3,6 +3,8 @@ export interface IBlog {
     name: string;
     description: string;
     websiteUrl: string;
+    createdAt: string;
+    isMembership: boolean;
 }
 
 export interface ICommonBlog {
@@ -28,5 +30,5 @@ export interface IBlogModelOut {
     page: number;
     pageSize: number;
     totalCount: number;
-    items: ICommonBlog[];
+    items: IBlog[];
 }

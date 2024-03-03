@@ -5,8 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Blog, BlogDocument, BlogModelType } from '../blog.schema';
 import { offsetPagination } from '../../common/utils/offset-for-pagination/offset-for-pagination';
 import { countTotalPages } from '../../common/utils/count-total-pages/count-total-pages';
-import { IBlogModelOut } from '../blog/output';
-import { pageBlogMapper } from '../blog.mapper';
+import { IBlog, IBlogModelOut } from '../blog/output';
+import { blogMapper, pageBlogMapper } from '../blog.mapper';
 
 @Injectable()
 export class BlogQueryRepository {
@@ -38,10 +38,10 @@ export class BlogQueryRepository {
         }
     }
 
-    async findById(id: string): PromiseNull<BlogDocument> {
+    async findById(id: string): PromiseNull<IBlog> {
         try {
             const blog: Nullable<BlogDocument> = await this.BlogModel.findById(id);
-            return blog;
+            return blog ? blogMapper(blog) : null;
         } catch (e) {
             console.error('[BLOG,findById]', e);
             return null;

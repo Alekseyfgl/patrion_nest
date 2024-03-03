@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PromiseNull } from '../../common/interfaces/optional.types';
 import { UpdateWriteOpResult } from 'mongoose';
-import { Blog, BlogModelType } from '../blog.schema';
+import { Blog, BlogDocument, BlogModelType } from '../blog.schema';
 import { IAddBlogDto, IUpdateBlogDto } from '../blog/input';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class BlogCommandRepository {
             const result: UpdateWriteOpResult = await this.BlogModel.updateOne({ _id: id }, dto);
             return !!result.matchedCount;
         } catch (e) {
-            console.error('[updateById]', e);
+            console.error('BlogCommandRepository [updateById]', e);
             return false;
         }
     }
@@ -25,18 +25,18 @@ export class BlogCommandRepository {
     async removeById(id: string): Promise<boolean> {
         try {
             const result = await this.BlogModel.deleteOne({ _id: id });
-            return !!result.deletedCount;
+            return result.deletedCount > 0;
         } catch (e) {
-            console.error('[removeById]', e);
+            console.error('BlogCommandRepository [removeById]', e);
             return false;
         }
     }
 
-    async create(dto: IAddBlogDto): PromiseNull<any> {
+    async create(dto: IAddBlogDto): PromiseNull<BlogDocument> {
         try {
-            return await this.BlogModel.create(dto);
-        } catch (err) {
-            console.error('[create]', err);
+            return this.BlogModel.create(dto);
+        } catch (e) {
+            console.error('BlogCommandRepository [create]', e);
             return null;
         }
     }

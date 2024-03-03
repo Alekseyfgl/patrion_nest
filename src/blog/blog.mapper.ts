@@ -1,6 +1,6 @@
 import { BlogQuery, BlogQueryTypeOptional } from './blog/input';
 import { BlogDocument } from './blog.schema';
-import { IBlogModelOut } from './blog/output';
+import { IBlog, IBlogModelOut } from './blog/output';
 
 export const pageBlogMapper = (data: { totalCount: number; pagesCount: number; pageSize: number; pageNumber: number; blogs: BlogDocument[] }): IBlogModelOut => {
     const { pageSize, pageNumber, pagesCount, totalCount, blogs } = data;
@@ -30,5 +30,16 @@ export const blogGetAllQueryMapper = (query: BlogQueryTypeOptional): BlogQuery =
         sortDirection: sortDirection || 'desc',
         sortBy: sortBy || 'createdAt',
         searchNameTerm: searchNameTerm || null,
+    };
+};
+
+export const blogMapper = (createdBlog: BlogDocument): IBlog => {
+    return {
+        id: createdBlog.id,
+        name: createdBlog.name,
+        description: createdBlog.description,
+        websiteUrl: createdBlog.websiteUrl,
+        isMembership: createdBlog.isMembership,
+        createdAt: createdBlog.createdAt.toISOString(),
     };
 };
