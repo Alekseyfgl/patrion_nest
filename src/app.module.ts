@@ -8,6 +8,8 @@ import { User, UserSchema } from './user/user.schema';
 import { UserQueryRepository } from './user/repository/user.query.repository';
 import { UserCommandRepository } from './user/repository/user.command.repository';
 import { ConfigModule } from '@nestjs/config';
+import { TestController } from './test/test.controller';
+import { TestRepository } from './test/test.repository';
 
 @Module({
     imports: [
@@ -22,7 +24,7 @@ import { ConfigModule } from '@nestjs/config';
             { name: User.name, schema: UserSchema },
         ]),
     ],
-    controllers: [UserController],
-    providers: [UserService, UserQueryRepository, UserCommandRepository, CatsRepository],
+    controllers: [UserController, TestController],
+    providers: [UserService, UserQueryRepository, UserCommandRepository, CatsRepository, TestRepository],
 })
 export class AppModule {}
