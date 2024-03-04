@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Blog, BlogDocument, BlogModelType } from '../blog.schema';
 import { offsetPagination } from '../../common/utils/offset-for-pagination/offset-for-pagination';
 import { countTotalPages } from '../../common/utils/count-total-pages/count-total-pages';
-import { IBlog, IBlogModelOut } from '../blog/output';
+import { IBlog, IBlogPagination } from '../blog/output';
 import { blogMapper, pageBlogMapper } from '../blog.mapper';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class BlogQueryRepository {
         @InjectModel(Blog.name)
         protected BlogModel: BlogModelType,
     ) {}
-    async findAll(query: BlogQuery): PromiseNull<IBlogModelOut> {
+    async findAll(query: BlogQuery): Promise<IBlogPagination> {
         const { pageSize, pageNumber, sortDirection, sortBy, searchNameTerm } = query;
 
         const filter: { name?: { $regex: RegExp } } = {};

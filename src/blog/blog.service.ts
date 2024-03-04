@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BlogCommandRepository } from './repository/blog.command.repository';
 import { IAddBlogDto, IUpdateBlogDto } from './blog/input';
 import { PromiseNull } from '../common/interfaces/optional.types';
+import { BlogCommandRepository } from './repositories/blog.command.repository';
+import { BlogDocument } from './blog.schema';
 
 @Injectable()
 export class BlogService {
@@ -11,15 +12,15 @@ export class BlogService {
         private configService: ConfigService,
     ) {}
 
-    async create(dto: IAddBlogDto): PromiseNull<any> {
+    async create(dto: IAddBlogDto): PromiseNull<BlogDocument> {
         return this.blogCommandRepository.create(dto);
     }
 
-    async updateById(id: string, dto: IUpdateBlogDto) {
+    async updateById(id: string, dto: IUpdateBlogDto): Promise<boolean> {
         return this.blogCommandRepository.updateById(id, dto);
     }
 
-    async removeById(id: string) {
+    async removeById(id: string): Promise<boolean> {
         return this.blogCommandRepository.removeById(id);
     }
 

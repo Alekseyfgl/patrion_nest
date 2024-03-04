@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RegistrationUserDto } from './interfeces/input';
-import { UserCommandRepository } from './repository/user.command.repository';
+import { UserCommandRepository } from './repositories/user.command.repository';
 import { ConfigService } from '@nestjs/config';
 import { PromiseNull } from '../common/interfaces/optional.types';
 import { UserDocument } from './user.schema';

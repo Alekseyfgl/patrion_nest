@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegistrationUserDto, UserPaginationQuery } from './interfeces/input';
-import { UserQueryRepository } from './repository/user.query.repository';
+import { UserQueryRepository } from './repositories/user.query.repository';
 import { createFilterGetAllUsersMapper, userMapper } from './user.mapper';
 import { IUser, IUserPaginationOut } from './interfeces/output';
 import { Nullable } from '../common/interfaces/optional.types';

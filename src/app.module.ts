@@ -5,16 +5,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Cat, CatSchema } from './cats/cat.schema';
 import { CatsRepository } from './cats/cat.repository';
 import { User, UserSchema } from './user/user.schema';
-import { UserQueryRepository } from './user/repository/user.query.repository';
-import { UserCommandRepository } from './user/repository/user.command.repository';
+import { UserQueryRepository } from './user/repositories/user.query.repository';
+import { UserCommandRepository } from './user/repositories/user.command.repository';
 import { ConfigModule } from '@nestjs/config';
 import { TestController } from './test/test.controller';
 import { TestRepository } from './test/test.repository';
 import { Blog, BlogSchema } from './blog/blog.schema';
 import { BlogService } from './blog/blog.service';
-import { BlogCommandRepository } from './blog/repository/blog.command.repository';
 import { BlogController } from './blog/blog.controller';
-import { BlogQueryRepository } from './blog/repository/blog.query.repository';
+import { BlogCommandRepository } from './blog/repositories/blog.command.repository';
+import { BlogQueryRepository } from './blog/repositories/blog.query.repository';
 
 @Module({
     imports: [

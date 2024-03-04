@@ -7,14 +7,6 @@ export interface IBlog {
     isMembership: boolean;
 }
 
-export interface ICommonBlog {
-    id: string;
-    name: string;
-    description: string;
-    websiteUrl: string;
-    createdAt: string;
-    isMembership: boolean;
-}
 // export interface IBlogSchema extends Document {
 //     id: string;
 //     name: string;
@@ -25,7 +17,7 @@ export interface ICommonBlog {
 //     // updatedAt: string;
 // }
 
-export interface IBlogModelOut {
+export interface IBlogPagination {
     pagesCount: number;
     page: number;
     pageSize: number;
