@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IAddBlogDto, IUpdateBlogDto } from './blog/input';
+import { IAddBlogDto, IUpdateBlogDto } from './interfaces/input';
 import { PromiseNull } from '../common/interfaces/optional.types';
 import { BlogCommandRepository } from './repositories/blog.command.repository';
 import { BlogDocument } from './blog.schema';
@@ -25,8 +25,8 @@ export class BlogService {
     }
 
     // async createPostToBlog(blogId: string, postDto: IPostToBlogDto): PromiseNull<PostSchema> {
-    //     const blog: Nullable<IBlogSchema> = await QueryBlogRepository.findById(blogId);
-    //     if (!blog) return null;
+    //     const interfaces: Nullable<IBlogSchema> = await QueryBlogRepository.findById(blogId);
+    //     if (!interfaces) return null;
     //
     //     const newPost: AddPostDto = {
     //         blogId: String(blogId),

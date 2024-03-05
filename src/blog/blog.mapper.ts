@@ -1,6 +1,6 @@
-import { BlogQuery, BlogQueryTypeOptional } from './blog/input';
+import { BlogQuery, BlogQueryTypeOptional } from './interfaces/input';
 import { BlogDocument } from './blog.schema';
-import { IBlog, IBlogPagination } from './blog/output';
+import { IBlog, IBlogPagination } from './interfaces/output';
 
 export const pageBlogMapper = (data: { totalCount: number; pagesCount: number; pageSize: number; pageNumber: number; blogs: BlogDocument[] }): IBlogPagination => {
     const { pageSize, pageNumber, pagesCount, totalCount, blogs } = data;

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { PromiseNull } from '../../common/interfaces/optional.types';
 import { UpdateWriteOpResult } from 'mongoose';
 import { Blog, BlogDocument, BlogModelType } from '../blog.schema';
-import { IAddBlogDto, IUpdateBlogDto } from '../blog/input';
+import { IAddBlogDto, IUpdateBlogDto } from '../interfaces/input';
 
 @Injectable()
 export class BlogCommandRepository {
@@ -17,7 +17,7 @@ export class BlogCommandRepository {
             const result: UpdateWriteOpResult = await this.BlogModel.updateOne({ _id: id }, dto);
             return !!result.matchedCount;
         } catch (e) {
-            console.error('BlogCommandRepository [updateById]', e);
+            console.error('PostCommandRepository [updateById]', e);
             return false;
         }
     }
@@ -27,7 +27,7 @@ export class BlogCommandRepository {
             const result = await this.BlogModel.deleteOne({ _id: id });
             return result.deletedCount > 0;
         } catch (e) {
-            console.error('BlogCommandRepository [removeById]', e);
+            console.error('PostCommandRepository [removeById]', e);
             return false;
         }
     }
@@ -36,7 +36,7 @@ export class BlogCommandRepository {
         try {
             return this.BlogModel.create(dto);
         } catch (e) {
-            console.error('BlogCommandRepository [create]', e);
+            console.error('PostCommandRepository [create]', e);
             return null;
         }
     }

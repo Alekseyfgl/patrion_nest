@@ -2,10 +2,10 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, 
 
 import { Nullable } from '../common/interfaces/optional.types';
 import { BlogService } from './blog.service';
-import { BlogQuery, BlogQueryTypeOptional, IAddBlogDto, IUpdateBlogDto } from './blog/input';
+import { BlogQuery, BlogQueryTypeOptional, IAddBlogDto, IUpdateBlogDto } from './interfaces/input';
 import { BlogDocument } from './blog.schema';
 import { blogGetAllQueryMapper, blogMapper } from './blog.mapper';
-import { IBlog, IBlogPagination } from './blog/output';
+import { IBlog, IBlogPagination } from './interfaces/output';
 import { CustomBadReqException } from '../common/exceptions/not-found.excep';
 import { HttpExceptionMessages } from '../common/constans/http-exception-messages';
 import { BlogQueryRepository } from './repositories/blog.query.repository';

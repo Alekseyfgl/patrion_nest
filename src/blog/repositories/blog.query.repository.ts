@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { BlogQuery } from '../blog/input';
+import { BlogQuery } from '../interfaces/input';
 import { Nullable, PromiseNull } from '../../common/interfaces/optional.types';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blog, BlogDocument, BlogModelType } from '../blog.schema';
 import { offsetPagination } from '../../common/utils/offset-for-pagination/offset-for-pagination';
 import { countTotalPages } from '../../common/utils/count-total-pages/count-total-pages';
-import { IBlog, IBlogPagination } from '../blog/output';
+import { IBlog, IBlogPagination } from '../interfaces/output';
 import { blogMapper, pageBlogMapper } from '../blog.mapper';
 
 @Injectable()
