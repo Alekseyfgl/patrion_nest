@@ -9,12 +9,18 @@ import { IBlog, IBlogPagination } from './interfaces/output';
 import { CustomBadReqException } from '../common/exceptions/not-found.excep';
 import { HttpExceptionMessages } from '../common/constans/http-exception-messages';
 import { BlogQueryRepository } from './repositories/blog.query.repository';
+import { IPostToBlogDto, PostsByBlogQuery, PostsByBlogQueryOptional } from '../post/interfaces/input';
+import { PostDocument } from '../post/post.schema';
+import { postMapper, postsGetAllQueryMapper } from '../post/post.mapper';
+import { IPost, IPostModelOut } from '../post/interfaces/output';
+import { PostQueryRepository } from '../post/repositories/post.query.repository';
 
 @Controller('blogs')
 export class BlogController {
     constructor(
         private readonly blogService: BlogService,
         private readonly blogQueryRepository: BlogQueryRepository,
+        private readonly postQueryRepository: PostQueryRepository,
     ) {}
 
     @Get()
@@ -34,7 +40,7 @@ export class BlogController {
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    async getBlogById(@Param('id') id: string) {
+    async getBlogById(@Param('id') id: string): Promise<IBlog> {
         const blog: Nullable<IBlog> = await this.blogQueryRepository.findById(id);
         if (!blog) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessages.NOT_FOUND);
         return blog;
@@ -42,15 +48,32 @@ export class BlogController {
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async removeBlogById(@Param('id') id: string) {
+    async removeBlogById(@Param('id') id: string): Promise<void> {
         const isRemoved: boolean = await this.blogService.removeById(id);
         if (!isRemoved) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessages.NOT_FOUND);
     }
 
     @Put(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async updateBlogById(@Param('id') id: string, @Body() dto: IUpdateBlogDto) {
+    async updateBlogById(@Param('id') id: string, @Body() dto: IUpdateBlogDto): Promise<void> {
         const isUpdated: boolean = await this.blogService.updateById(id, dto);
         if (!isUpdated) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessages.NOT_FOUND);
+    }
+
+    @Post(':id/posts')
+    @HttpCode(HttpStatus.CREATED)
+    async createPostToBlog(@Body() dto: IPostToBlogDto, @Param('id') id: string): Promise<IPost> {
+        const createdPost: Nullable<PostDocument> = await this.blogService.createPostToBlog(id, dto);
+        if (!createdPost) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessages.NOT_FOUND);
+        return postMapper(createdPost);
+    }
+    @Get(':id/posts')
+    @HttpCode(HttpStatus.OK)
+    async getAllPostsByBlogId(@Param('id') id: string, @Query() inputQuery: PostsByBlogQueryOptional): Promise<IPostModelOut> {
+        const query: PostsByBlogQuery = postsGetAllQueryMapper(inputQuery);
+
+        const blogWithPosts: Nullable<IPostModelOut> = await this.postQueryRepository.findAllPostsByBlogId(id, query);
+        if (!blogWithPosts) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessages.NOT_FOUND);
+        return blogWithPosts;
     }
 }

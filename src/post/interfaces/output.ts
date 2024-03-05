@@ -1,3 +1,9 @@
+export interface IShortPost {
+    name: string;
+    description: string;
+    websiteUrl: string;
+}
+
 export interface IPost {
     id: string;
     blogId: string;
