@@ -19,9 +19,4 @@ export class UserService {
     async removeById(userId: string): Promise<boolean> {
         return this.userCommandRepository.removeById(userId);
     }
-
-    // logEnv() {
-    //     const saltRounds = this.configService.get<number>('SALT_ROUNDS', 10);
-    //     console.log(saltRounds);
-    // }
 }
