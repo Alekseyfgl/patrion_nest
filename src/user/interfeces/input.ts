@@ -1,12 +1,13 @@
 import { IsIn, IsNumber, IsOptional, IsString, Length, Matches, Min } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { SORT_DIRECTION } from '../../common/constans/sort-directions.const';
+import { VALIDATION_MSG } from '../../common/constans/validation-messages.const';
 
 export class RegistrationUserDto {
     @IsString()
     @Length(3, 10)
     @Matches(/^[a-zA-Z0-9_-]*$/, {
-        message: 'Login should have only en. letters, numbers, underscores and hyphens',
+        message: VALIDATION_MSG.INCORRECT_LOGIN,
     })
     login: string;
 
@@ -15,7 +16,7 @@ export class RegistrationUserDto {
     password: string;
 
     @IsString()
-    @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+    @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, { message: VALIDATION_MSG.INCORRECT_VALUE })
     email: string;
 }
 
@@ -52,13 +53,3 @@ export class UserPaginationQueryDto {
     @Transform(({ value }) => (value ? Number(value) : 10))
     pageSize: number = 10;
 }
-
-// export interface UserPaginationQuery {
-//     searchLoginTerm: Nullable<string>;
-//     searchEmailTerm: Nullable<string>;
-//     sortBy: string;
-//     sortDirection: 'asc' | 'desc';
-//     pageNumber: number;
-//     pageSize: number;
-// }
-// export type UserPaginationQueryOptional = Partial<UserPaginationQuery>;

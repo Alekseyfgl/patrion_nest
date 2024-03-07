@@ -12,14 +12,12 @@ async function bootstrap() {
     // Настройка глобального ValidationPipe
     app.useGlobalPipes(
         new ValidationPipe({
-            stopAtFirstError: true,
+            stopAtFirstError: false,
             exceptionFactory: (errors) => {
-                const errorMessages = errors.map((error) => {
-                    return {
-                        field: error.property,
-                        message: Object.values(error.constraints as any)[0], // Берем первое сообщение об ошибке
-                    };
-                });
+                const errorMessages = errors.map((e) => ({
+                    field: e.property,
+                    message: Object.values(e.constraints as any)[0], // Берем первое сообщение об ошибке
+                }));
                 throw new BadRequestException(errorMessages);
             },
         }),
