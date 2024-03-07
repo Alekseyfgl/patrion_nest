@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument, UserModelType } from '../user.schema';
-import { UserPaginationQuery } from '../interfeces/input';
 import { IUserPaginationOut } from '../interfeces/output';
 import { offsetPagination } from '../../common/utils/offset-for-pagination/offset-for-pagination';
 import { countTotalPages } from '../../common/utils/count-total-pages/count-total-pages';
 import { pageUsersMapper } from '../user.mapper';
+import { UserPaginationQueryDto } from '../interfeces/input';
 
 @Injectable()
 export class UserQueryRepository {
@@ -14,7 +14,7 @@ export class UserQueryRepository {
         private readonly UserModel: UserModelType,
     ) {}
 
-    async findAll(query: UserPaginationQuery): Promise<IUserPaginationOut> {
+    async findAll(query: UserPaginationQueryDto): Promise<IUserPaginationOut> {
         const { pageSize, pageNumber, sortDirection, sortBy, searchEmailTerm, searchLoginTerm } = query;
 
         const filter: { $or?: { email?: { $regex: RegExp }; login?: { $regex: RegExp } }[] } = {};

@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RegistrationUserDto, UserPaginationQuery } from './interfeces/input';
+import { RegistrationUserDto, UserPaginationQueryDto } from './interfeces/input';
 import { UserQueryRepository } from './repositories/user.query.repository';
-import { createFilterGetAllUsersMapper, userMapper } from './user.mapper';
+import { userMapper } from './user.mapper';
 import { IUser, IUserPaginationOut } from './interfeces/output';
 import { Nullable } from '../common/interfaces/optional.types';
 import { UserDocument } from './user.schema';
-import { CustomBadReqException } from '../common/exceptions/not-found.excep';
-import { HttpExceptionMessages } from '../common/constans/http-exception-messages';
+import { HttpExceptionMessagesConst } from '../common/constans/http-exception-messages.const';
+import { CustomBadReqException } from '../common/http-exceptions/custom-http-exeption';
 
 @Controller('users')
 export class UserController {
@@ -20,14 +20,14 @@ export class UserController {
     @HttpCode(HttpStatus.CREATED)
     async createUser(@Body() dto: RegistrationUserDto): Promise<IUser> {
         const newUser: Nullable<UserDocument> = await this.userService.create(dto);
-        if (!newUser) throw new CustomBadReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessages.BAD_REQUEST);
+        if (!newUser) throw new CustomBadReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessagesConst.BAD_REQUEST);
         return userMapper(newUser);
     }
 
     @Get()
-    async getAll(@Query() inputQuery: UserPaginationQuery): Promise<IUserPaginationOut> {
-        const query: UserPaginationQuery = createFilterGetAllUsersMapper(inputQuery);
-        return this.userQueryRepository.findAll(query);
+    async getAll(@Query() inputQuery: UserPaginationQueryDto): Promise<IUserPaginationOut> {
+        // const query: UserPaginationQuery = createFilterGetAllUsersMapper(inputQuery);
+        return this.userQueryRepository.findAll(inputQuery);
     }
 
     @Delete(':id')

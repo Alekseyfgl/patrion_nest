@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { HttpExceptionMessages } from '../constans/http-exception-messages';
+import { HttpExceptionMessagesConst } from '../constans/http-exception-messages.const';
 
 export class CustomBadReqException extends HttpException {
-    constructor(status: HttpStatus, message: HttpExceptionMessages, field: string = '') {
+    constructor(status: HttpStatus, message: HttpExceptionMessagesConst, field: string = '') {
         super({ errorsMessages: [{ message, field }] }, status);
     }
 }

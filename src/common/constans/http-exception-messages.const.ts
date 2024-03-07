@@ -1,4 +1,4 @@
-export enum HttpExceptionMessages {
+export enum HttpExceptionMessagesConst {
     BAD_REQUEST = 'Bad request', // 400
     UNAUTHORIZED = 'Unauthorized', // 401
     FORBIDDEN = 'Forbidden', // 403
