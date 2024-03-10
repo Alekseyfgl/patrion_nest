@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 
 import { Nullable } from '../common/interfaces/optional.types';
-import { IAddPostDto, PostsByBlogQuery, PostsByBlogQueryOptional, UpdatePostDto } from './interfaces/input';
+import { AddPostDto, PostsByBlogQuery, UpdatePostDto } from './interfaces/input';
 import { IPost, IPostModelOut } from './interfaces/output';
 import { HttpExceptionMessagesConst } from '../common/constans/http-exception-messages.const';
 import { PostService } from './post.service';
 import { PostQueryRepository } from './repositories/post.query.repository';
 import { PostDocument } from './post.schema';
-import { postMapper, postsGetAllQueryMapper } from './post.mapper';
+import { postMapper } from './post.mapper';
 import { CustomBadReqException } from '../common/http-exceptions/custom-http-exeption';
 
 @Controller('posts')
@@ -19,7 +19,7 @@ export class PostController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    async createPost(@Body() dto: IAddPostDto): Promise<IPost> {
+    async createPost(@Body() dto: AddPostDto): Promise<IPost> {
         const createdPost: Nullable<PostDocument> = await this.postService.create(dto);
         if (!createdPost) throw new CustomBadReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessagesConst.BAD_REQUEST);
         return postMapper(createdPost);
@@ -35,8 +35,7 @@ export class PostController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    async getAll(@Query() inputQuery: PostsByBlogQueryOptional): Promise<IPostModelOut> {
-        const query: PostsByBlogQuery = postsGetAllQueryMapper(inputQuery);
+    async getAll(@Query() query: PostsByBlogQuery): Promise<IPostModelOut> {
         const posts: IPostModelOut = await this.postQueryRepository.getAll(query);
         return posts;
     }

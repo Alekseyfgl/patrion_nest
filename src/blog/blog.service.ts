@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IAddBlogDto, IUpdateBlogDto } from './interfaces/input';
+import { AddBlogDto, UpdateBlogDto } from './interfaces/input';
 import { Nullable, PromiseNull } from '../common/interfaces/optional.types';
 import { BlogCommandRepository } from './repositories/blog.command.repository';
 import { BlogDocument } from './blog.schema';
-import { IAddPostDto, IPostToBlogDto } from '../post/interfaces/input';
+import { AddPostDto, IPostToBlogDto } from '../post/interfaces/input';
 import { PostDocument } from '../post/post.schema';
 import { PostCommandRepository } from '../post/repositories/post.command.repository';
 import { PostQueryRepository } from '../post/repositories/post.query.repository';
@@ -21,11 +21,11 @@ export class BlogService {
         private configService: ConfigService,
     ) {}
 
-    async create(dto: IAddBlogDto): PromiseNull<BlogDocument> {
+    async create(dto: AddBlogDto): PromiseNull<BlogDocument> {
         return this.blogCommandRepository.create(dto);
     }
 
-    async updateById(id: string, dto: IUpdateBlogDto): Promise<boolean> {
+    async updateById(id: string, dto: UpdateBlogDto): Promise<boolean> {
         return this.blogCommandRepository.updateById(id, dto);
     }
 
@@ -37,7 +37,7 @@ export class BlogService {
         const blog: Nullable<IBlog> = await this.blogQueryRepository.findById(blogId);
         if (!blog) return null;
 
-        const newPost: IAddPostDto = {
+        const newPost: AddPostDto = {
             blogId: String(blogId),
             shortDescription: postDto.shortDescription,
             content: postDto.content,

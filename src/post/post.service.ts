@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IAddPostDto, UpdatePostDto } from './interfaces/input';
+import { AddPostDto, UpdatePostDto } from './interfaces/input';
 import { PromiseNull } from '../common/interfaces/optional.types';
 import { PostCommandRepository } from './repositories/post.command.repository';
 import { PostDocument } from './post.schema';
@@ -8,7 +8,7 @@ import { PostDocument } from './post.schema';
 export class PostService {
     constructor(protected postCommandRepository: PostCommandRepository) {}
 
-    async create(dto: IAddPostDto): PromiseNull<PostDocument> {
+    async create(dto: AddPostDto): PromiseNull<PostDocument> {
         return this.postCommandRepository.create(dto);
     }
     async updateById(id: string, dto: UpdatePostDto): Promise<boolean> {

@@ -1,4 +1,3 @@
-import { BlogQuery, BlogQueryTypeOptional } from './interfaces/input';
 import { BlogDocument } from './blog.schema';
 import { IBlog, IBlogPagination } from './interfaces/output';
 
@@ -19,17 +18,6 @@ export const pageBlogMapper = (data: { totalCount: number; pagesCount: number; p
                 createdAt: blog.createdAt.toISOString(),
             };
         }),
-    };
-};
-
-export const blogGetAllQueryMapper = (query: BlogQueryTypeOptional): BlogQuery => {
-    const { pageSize, pageNumber, sortDirection, sortBy, searchNameTerm } = query;
-    return {
-        pageSize: pageSize ? +pageSize : 10,
-        pageNumber: pageNumber ? +pageNumber : 1,
-        sortDirection: sortDirection || 'desc',
-        sortBy: sortBy || 'createdAt',
-        searchNameTerm: searchNameTerm || null,
     };
 };
 

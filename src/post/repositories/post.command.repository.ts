@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Post, PostDocument, PostModelType } from '../post.schema';
-import { IAddPostDto, UpdatePostDto } from '../interfaces/input';
+import { AddPostDto, UpdatePostDto } from '../interfaces/input';
 import { Nullable, PromiseNull } from '../../common/interfaces/optional.types';
 import { UpdateWriteOpResult } from 'mongoose';
 
@@ -12,7 +12,7 @@ export class PostCommandRepository {
         protected PostModel: PostModelType,
     ) {}
 
-    async create(dto: IAddPostDto): PromiseNull<PostDocument> {
+    async create(dto: AddPostDto): PromiseNull<PostDocument> {
         try {
             const createdPost: Nullable<PostDocument> = await this.PostModel.create(dto);
             if (!createdPost) return null;

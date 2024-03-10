@@ -2,6 +2,7 @@ import { IsIn, IsNumber, IsOptional, IsString, Length, Matches, Min } from 'clas
 import { Transform, Type } from 'class-transformer';
 import { SORT_DIRECTION } from '../../common/constans/sort-directions.const';
 import { VALIDATION_MSG } from '../../common/constans/validation-messages.const';
+import { Nullable } from '../../common/interfaces/optional.types';
 
 export class RegistrationUserDto {
     @IsString()
@@ -24,32 +25,36 @@ export class UserPaginationQueryDto {
     @IsOptional()
     @IsString()
     @Transform(({ value }) => value || null)
-    searchLoginTerm?: string;
+    searchLoginTerm: Nullable<string>;
 
     @IsOptional()
     @IsString()
     @Transform(({ value }) => value || null)
-    searchEmailTerm?: string;
+    searchEmailTerm: Nullable<string>;
 
     @IsString()
     @IsOptional()
     @Transform(({ value }) => value || 'createdAt')
-    sortBy: string = 'createdAt';
+    sortBy: string;
+    // sortBy: string = 'createdAt';
 
     @IsIn([SORT_DIRECTION.ASC, SORT_DIRECTION.DESC])
     @IsOptional()
     @Transform(({ value }) => value || SORT_DIRECTION.DESC)
-    sortDirection: SORT_DIRECTION = SORT_DIRECTION.DESC;
+    sortDirection: SORT_DIRECTION;
+    // sortDirection: SORT_DIRECTION = SORT_DIRECTION.DESC;
 
     @IsNumber()
     @Min(1)
     @Type(() => Number)
     @Transform(({ value }) => (value ? Number(value) : 1))
-    pageNumber: number = 1;
+    pageNumber: number;
+    // pageNumber: number = 1;
 
     @IsNumber()
     @Min(1)
     @Type(() => Number)
     @Transform(({ value }) => (value ? Number(value) : 10))
-    pageSize: number = 10;
+    pageSize: number;
+    // pageSize: number = 10;
 }

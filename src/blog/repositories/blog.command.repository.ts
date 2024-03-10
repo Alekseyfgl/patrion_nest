@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { PromiseNull } from '../../common/interfaces/optional.types';
 import { UpdateWriteOpResult } from 'mongoose';
 import { Blog, BlogDocument, BlogModelType } from '../blog.schema';
-import { IAddBlogDto, IUpdateBlogDto } from '../interfaces/input';
+import { AddBlogDto, UpdateBlogDto } from '../interfaces/input';
 
 @Injectable()
 export class BlogCommandRepository {
@@ -12,7 +12,7 @@ export class BlogCommandRepository {
         protected BlogModel: BlogModelType,
     ) {}
 
-    async updateById(id: string, dto: IUpdateBlogDto): Promise<boolean> {
+    async updateById(id: string, dto: UpdateBlogDto): Promise<boolean> {
         try {
             const result: UpdateWriteOpResult = await this.BlogModel.updateOne({ _id: id }, dto);
             return !!result.matchedCount;
@@ -32,7 +32,7 @@ export class BlogCommandRepository {
         }
     }
 
-    async create(dto: IAddBlogDto): PromiseNull<BlogDocument> {
+    async create(dto: AddBlogDto): PromiseNull<BlogDocument> {
         try {
             return this.BlogModel.create(dto);
         } catch (e) {
