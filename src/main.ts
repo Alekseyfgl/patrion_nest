@@ -2,10 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/exception-filter/custom-exception-filter';
+import ip from 'ip';
+import configDotenv from 'dotenv';
+import * as process from 'process';
 
+configDotenv.config();
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-
+    app.enableCors();
     // Регистрация глобального фильтра исключений
     app.useGlobalFilters(new HttpExceptionFilter());
 
@@ -23,7 +27,7 @@ async function bootstrap() {
         }),
     );
 
-    app.enableCors();
-    await app.listen(3001);
+    await app.listen(process.env.SERVER_PORT!);
+    console.log(`Server run on ${ip.address()}:${process.env.SERVER_PORT}`);
 }
 bootstrap();

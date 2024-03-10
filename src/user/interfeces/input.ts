@@ -25,36 +25,34 @@ export class UserPaginationQueryDto {
     @IsOptional()
     @IsString()
     @Transform(({ value }) => value || null)
-    searchLoginTerm: Nullable<string>;
+    searchLoginTerm: Nullable<string> = null; // default value
 
-    @IsOptional()
     @IsString()
+    @IsOptional()
     @Transform(({ value }) => value || null)
-    searchEmailTerm: Nullable<string>;
+    searchEmailTerm: Nullable<string> = null;
 
     @IsString()
     @IsOptional()
     @Transform(({ value }) => value || 'createdAt')
-    sortBy: string;
-    // sortBy: string = 'createdAt';
+    sortBy: string = 'createdAt';
 
     @IsIn([SORT_DIRECTION.ASC, SORT_DIRECTION.DESC])
     @IsOptional()
     @Transform(({ value }) => value || SORT_DIRECTION.DESC)
-    sortDirection: SORT_DIRECTION;
-    // sortDirection: SORT_DIRECTION = SORT_DIRECTION.DESC;
+    sortDirection: SORT_DIRECTION = SORT_DIRECTION.DESC;
 
     @IsNumber()
+    @IsOptional()
     @Min(1)
     @Type(() => Number)
     @Transform(({ value }) => (value ? Number(value) : 1))
-    pageNumber: number;
-    // pageNumber: number = 1;
+    pageNumber: number = 1;
 
     @IsNumber()
+    @IsOptional()
     @Min(1)
-    @Type(() => Number)
-    @Transform(({ value }) => (value ? Number(value) : 10))
-    pageSize: number;
-    // pageSize: number = 10;
+    @Type(() => Number) //if there is a value convert to number
+    @Transform(({ value }) => (value ? Number(value) : 10)) // if there is a field without value, set value = 10
+    pageSize: number = 10; // if there is not a field, set 10
 }
