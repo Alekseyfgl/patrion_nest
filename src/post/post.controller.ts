@@ -9,12 +9,16 @@ import { PostQueryRepository } from './repositories/post.query.repository';
 import { PostDocument } from './post.schema';
 import { postMapper } from './post.mapper';
 import { CustomBadReqException } from '../common/http-exceptions/custom-http-exeption';
+import { CommentsByPostQuery } from '../comment/interfaces/input';
+import { ICommentPaginationOut } from '../comment/interfaces/output';
+import { CommentQueryRepository } from '../comment/repositories/comment.query.repository';
 
 @Controller('posts')
 export class PostController {
     constructor(
         private readonly postService: PostService,
         private readonly postQueryRepository: PostQueryRepository,
+        private readonly commentQueryRepository: CommentQueryRepository,
     ) {}
 
     @Post()
@@ -52,5 +56,14 @@ export class PostController {
     async removeById(@Param('id') id: string) {
         const isRemoved: boolean = await this.postService.removeById(id);
         if (!isRemoved) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
+    }
+
+    @Get(':id/comments')
+    @HttpCode(HttpStatus.OK)
+    async getAllCommentsByPostId(@Param('id') postId: string, query: CommentsByPostQuery) {
+        const result: Nullable<ICommentPaginationOut> = await this.commentQueryRepository.getAllCommentsByPostId(postId, query);
+        if (!result) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
+
+        return result;
     }
 }
