@@ -17,7 +17,7 @@ export class BlogCommandRepository {
             const result: UpdateWriteOpResult = await this.BlogModel.updateOne({ _id: id }, dto);
             return !!result.matchedCount;
         } catch (e) {
-            console.error('PostCommandRepository [updateById]', e);
+            console.error('CommentCommandRepository [updateById]', e);
             return false;
         }
     }
@@ -27,7 +27,7 @@ export class BlogCommandRepository {
             const result = await this.BlogModel.deleteOne({ _id: id });
             return result.deletedCount > 0;
         } catch (e) {
-            console.error('PostCommandRepository [removeById]', e);
+            console.error('CommentCommandRepository [removeById]', e);
             return false;
         }
     }
@@ -36,7 +36,7 @@ export class BlogCommandRepository {
         try {
             return this.BlogModel.create(dto);
         } catch (e) {
-            console.error('PostCommandRepository [create]', e);
+            console.error('CommentCommandRepository [create]', e);
             return null;
         }
     }

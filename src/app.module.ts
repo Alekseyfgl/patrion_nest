@@ -18,6 +18,11 @@ import { PostCommandRepository } from './post/repositories/post.command.reposito
 import { PostQueryRepository } from './post/repositories/post.query.repository';
 import { PostService } from './post/post.service';
 import { PostController } from './post/post.controller';
+import { Comment, CommentSchema } from './comment/comment.schema';
+import { CommentQueryRepository } from './comment/repositories/comment.query.repository';
+import { CommentCommandRepository } from './comment/repositories/comment.command.repository';
+import { CommentService } from './comment/comment.service';
+import { CommentController } from './comment/comment.controller';
 
 @Module({
     imports: [
@@ -30,19 +35,23 @@ import { PostController } from './post/post.controller';
             { name: User.name, schema: UserSchema },
             { name: Blog.name, schema: BlogSchema },
             { name: Post.name, schema: PostSchema },
+            { name: Comment.name, schema: CommentSchema },
         ]),
     ],
-    controllers: [UserController, BlogController, PostController, TestController],
+    controllers: [UserController, BlogController, PostController, CommentController, TestController],
     providers: [
         UserService,
         BlogService,
         PostService,
+        CommentService,
         BlogCommandRepository,
         BlogQueryRepository,
         UserQueryRepository,
         UserCommandRepository,
         PostCommandRepository,
         PostQueryRepository,
+        CommentQueryRepository,
+        CommentCommandRepository,
         TestRepository,
     ],
 })

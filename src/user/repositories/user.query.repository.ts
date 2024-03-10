@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument, UserModelType } from '../user.schema';
-import { IUserPaginationOut } from '../interfeces/output';
+import { IUser, IUserPaginationOut } from '../interfeces/output';
 import { offsetPagination } from '../../common/utils/offset-for-pagination/offset-for-pagination';
 import { countTotalPages } from '../../common/utils/count-total-pages/count-total-pages';
-import { pageUsersMapper } from '../user.mapper';
+import { pageUsersMapper, userMapper } from '../user.mapper';
 import { UserPaginationQueryDto } from '../interfeces/input';
+import { Nullable, PromiseNull } from '../../common/interfaces/optional.types';
 
 @Injectable()
 export class UserQueryRepository {
@@ -46,4 +47,43 @@ export class UserQueryRepository {
             return pageUsersMapper({ users: [], pagesCount: 0, totalCount: 0, pageSize, pageNumber });
         }
     }
+
+    async findById(id: string): PromiseNull<IUser> {
+        try {
+            const user: Nullable<UserDocument> = await this.UserModel.findById(id);
+            if (!user) return null;
+            return userMapper(user);
+        } catch (e) {
+            console.error('[user,findById]', e);
+            return null;
+        }
+    }
+
+    //  async findByLoginOrEmail(loginOrEmail: string): PromiseNull<ReturnType<typeof userWithPasswordMapper>> {
+    //     try {
+    //         const condition: RegExp = new RegExp('^' + loginOrEmail + '$', 'i');
+    //
+    //         const user: Nullable<UserSchema> = await UserModel.findOne({ $or: [{ login: condition }, { email: condition }] });
+    //         if (!user) return null;
+    //
+    //         const confirmationStatus = await QueryConfirmationUserRepository.findConfStatusByUserId(user._id.toString());
+    //         if (!confirmationStatus) return null;
+    //
+    //         return userWithPasswordMapper(user, confirmationStatus);
+    //     } catch (e) {
+    //         console.error('[user,findByLoginOrEmail]', e);
+    //         return null;
+    //     }
+    // }
+
+    // async findMe(userId: string): PromiseNull<IMe> {
+    //     try {
+    //         const user: Nullable<UserSchema> = await UserModel.findById(userId);
+    //         if (!user) return null;
+    //         return meMapper(user);
+    //     } catch (e) {
+    //         console.error('[user,findMe]', e);
+    //         return null;
+    //     }
+    // }
 }
