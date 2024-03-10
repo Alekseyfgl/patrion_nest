@@ -21,7 +21,7 @@ export class RegistrationUserDto {
     email: string;
 }
 
-export class UserPaginationQueryDto {
+export class UserPaginationQuery {
     @IsOptional()
     @IsString()
     @Transform(({ value }) => value || null)

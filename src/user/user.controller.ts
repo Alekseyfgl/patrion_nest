@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RegistrationUserDto, UserPaginationQueryDto } from './interfeces/input';
+import { RegistrationUserDto, UserPaginationQuery } from './interfeces/input';
 import { UserQueryRepository } from './repositories/user.query.repository';
 import { userMapper } from './user.mapper';
 import { IUser, IUserPaginationOut } from './interfeces/output';
@@ -27,7 +27,7 @@ export class UserController {
     }
 
     @Get()
-    async getAll(@Query() inputQuery: UserPaginationQueryDto): Promise<IUserPaginationOut> {
+    async getAll(@Query() inputQuery: UserPaginationQuery): Promise<IUserPaginationOut> {
         console.log(inputQuery);
         return this.userQueryRepository.findAll(inputQuery);
     }

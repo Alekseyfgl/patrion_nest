@@ -5,7 +5,7 @@ import { IUser, IUserPaginationOut } from '../interfeces/output';
 import { offsetPagination } from '../../common/utils/offset-for-pagination/offset-for-pagination';
 import { countTotalPages } from '../../common/utils/count-total-pages/count-total-pages';
 import { pageUsersMapper, userMapper } from '../user.mapper';
-import { UserPaginationQueryDto } from '../interfeces/input';
+import { UserPaginationQuery } from '../interfeces/input';
 import { Nullable, PromiseNull } from '../../common/interfaces/optional.types';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class UserQueryRepository {
         private readonly UserModel: UserModelType,
     ) {}
 
-    async findAll(query: UserPaginationQueryDto): Promise<IUserPaginationOut> {
+    async findAll(query: UserPaginationQuery): Promise<IUserPaginationOut> {
         const { pageSize, pageNumber, sortDirection, sortBy, searchEmailTerm, searchLoginTerm } = query;
 
         const filter: { $or?: { email?: { $regex: RegExp }; login?: { $regex: RegExp } }[] } = {};
