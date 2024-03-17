@@ -7,8 +7,6 @@ export class TestController {
     @Delete('/all-data')
     @HttpCode(HttpStatus.NO_CONTENT)
     async clearDB(): Promise<void> {
-        // console.log('clearDB');
-        // await clearMongoCollections();
         await this.testRepository.clearMongoCollections();
     }
 }

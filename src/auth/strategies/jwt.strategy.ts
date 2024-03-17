@@ -20,7 +20,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(tokenPayload: IJwtPayload): Promise<IUserSession> {
-        // console.log('tokenPayload', tokenPayload);
         const { userId, deviceId } = tokenPayload;
         const user: Nullable<IUser> = await this.userQueryRepository.findById(userId);
 
@@ -28,7 +27,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             throw new CustomReqException(HttpStatus.UNAUTHORIZED, HttpExceptionMessagesConst.UNAUTHORIZED);
         }
 
-        // should add checking deviceId session
+        /**
+         *  @TODO  should add checking deviceId session
+         */
+
         return { userId, deviceId };
     }
 }
