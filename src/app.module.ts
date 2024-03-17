@@ -30,6 +30,7 @@ import { LocalStrategy } from './auth/strategies/local.strategy';
 import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { AuthController } from './auth/auth.controller';
 import { HttpBasicStrategy } from './auth/strategies/basic.strategy';
+import { LoggerService } from './common/logger/logger.service';
 
 @Module({
     imports: [
@@ -57,6 +58,7 @@ import { HttpBasicStrategy } from './auth/strategies/basic.strategy';
         BlogService,
         PostService,
         CommentService,
+        LoggerService,
         // Repositories
         BlogCommandRepository,
         BlogQueryRepository,

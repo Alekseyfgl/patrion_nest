@@ -5,6 +5,7 @@ import { HttpExceptionFilter } from './common/exception-filter/custom-exception-
 import ip from 'ip';
 import configDotenv from 'dotenv';
 import * as process from 'process';
+import { LoggerService } from './common/logger/logger.service';
 
 configDotenv.config();
 async function bootstrap() {
@@ -30,8 +31,10 @@ async function bootstrap() {
             },
         }),
     );
+    const logger = new LoggerService();
+    app.useLogger(logger);
 
     await app.listen(process.env.SERVER_PORT!);
-    console.log(`Server run on ${ip.address()}:${process.env.SERVER_PORT}`);
+    logger.log('Main', `Server run on ${ip.address()}:${process.env.SERVER_PORT}, MODE:${process.env.NODE_ENV}`);
 }
 bootstrap();
