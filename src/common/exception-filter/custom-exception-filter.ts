@@ -1,6 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ICustomErrors } from '../interfaces/error.interface';
+import { HttpExceptionMessagesConst } from '../constans/http-exception-messages.const';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -20,17 +21,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 break;
             }
             case HttpStatus.UNAUTHORIZED: {
-                response.status(status).json(exceptionResponse as ICustomErrors);
+                response.status(status).json({ errorsMessages: [{ message: HttpExceptionMessagesConst.UNAUTHORIZED, field: '' }] } as ICustomErrors);
                 break;
             }
 
             default:
                 response.status(status).json(exceptionResponse);
-                // response.status(status).json({
-                //     //     statusCode: status,
-                //     //     timestamp: new Date().toISOString(),
-                //     //     path: request.url,
-                //     // });
                 break;
         }
     }

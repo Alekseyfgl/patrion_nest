@@ -5,12 +5,15 @@ import bcrypt from 'bcrypt';
 import { PromiseNull } from '../common/interfaces/optional.types';
 import { userMapper } from '../user/user.mapper';
 import { IUser } from '../user/interfeces/output';
+import { setMilliseconds } from 'date-fns';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
     constructor(
         private userQueryRepository: UserQueryRepository,
         private readonly jwtService: JwtService,
+        private configService: ConfigService,
     ) {}
 
     async validateUser(username: string, pass: string): PromiseNull<IUser> {
@@ -23,11 +26,20 @@ export class AuthService {
         return userMapper(user);
     }
 
-    async login(user: any) {
-        const payload = { username: user.username, sub: user.userId };
-        return {
-            accessToken: this.jwtService.sign(payload),
-        };
+    async login(user: IUser) {
+        const deviceId = (+new Date()).toString();
+
+        const iat: number = Math.floor(+setMilliseconds(new Date(), 0) / 1000);
+        const payload = { userId: user.id, deviceId, iat };
+
+        const accessExpInSec = this.configService.get<string>('ACCESS_TOKEN_EXP');
+        const refreshExpInSec = this.configService.get<string>('REFRESH_TOKEN_EXP');
+
+        const [accessToken, refreshToken] = await Promise.all([
+            this.jwtService.signAsync(payload, { expiresIn: accessExpInSec }),
+            this.jwtService.signAsync(payload, { expiresIn: refreshExpInSec }),
+        ]);
+        return { accessToken, refreshToken };
     }
 
     private async checkPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
