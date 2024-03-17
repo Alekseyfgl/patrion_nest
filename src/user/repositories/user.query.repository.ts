@@ -59,22 +59,23 @@ export class UserQueryRepository {
         }
     }
 
-    //  async findByLoginOrEmail(loginOrEmail: string): PromiseNull<ReturnType<typeof userWithPasswordMapper>> {
-    //     try {
-    //         const condition: RegExp = new RegExp('^' + loginOrEmail + '$', 'i');
-    //
-    //         const user: Nullable<UserSchema> = await UserModel.findOne({ $or: [{ login: condition }, { email: condition }] });
-    //         if (!user) return null;
-    //
-    //         const confirmationStatus = await QueryConfirmationUserRepository.findConfStatusByUserId(user._id.toString());
-    //         if (!confirmationStatus) return null;
-    //
-    //         return userWithPasswordMapper(user, confirmationStatus);
-    //     } catch (e) {
-    //         console.error('[user,findByLoginOrEmail]', e);
-    //         return null;
-    //     }
-    // }
+    // async findByLoginOrEmail(loginOrEmail: string): PromiseNull<ReturnType<typeof userWithPasswordMapper>> {
+    async findByLoginOrEmail(loginOrEmail: string): PromiseNull<UserDocument> {
+        try {
+            const condition: RegExp = new RegExp('^' + loginOrEmail + '$', 'i');
+
+            const user: Nullable<UserDocument> = await this.UserModel.findOne({ $or: [{ login: condition }, { email: condition }] });
+            if (!user) return null;
+            return user;
+            // const confirmationStatus = await QueryConfirmationUserRepository.findConfStatusByUserId(user._id.toString());
+            // if (!confirmationStatus) return null;
+
+            // return userWithPasswordMapper(user, confirmationStatus);
+        } catch (e) {
+            console.error('[user,findByLoginOrEmail]', e);
+            return null;
+        }
+    }
 
     // async findMe(userId: string): PromiseNull<IMe> {
     //     try {

@@ -24,17 +24,6 @@
 import { UserDocument } from './user.schema';
 import { IUser, IUserPaginationOut } from './interfeces/output';
 
-// export const createFilterGetAllUsersMapper = (query: UserPaginationQueryOptional): UserPaginationQuery => {
-//     return {
-//         pageSize: query.pageSize ? +query.pageSize : 10,
-//         pageNumber: query.pageNumber ? +query.pageNumber : 1,
-//         sortBy: query.sortBy || 'createdAt',
-//         sortDirection: query.sortDirection || 'desc',
-//         searchEmailTerm: query.searchEmailTerm || null,
-//         searchLoginTerm: query.searchLoginTerm || null,
-//     };
-// };
-
 export const pageUsersMapper = (data: { totalCount: number; pagesCount: number; pageSize: number; pageNumber: number; users: UserDocument[] }): IUserPaginationOut => {
     const { pageSize, pageNumber, pagesCount, totalCount, users } = data;
     return {

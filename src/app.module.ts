@@ -23,6 +23,12 @@ import { CommentQueryRepository } from './comment/repositories/comment.query.rep
 import { CommentCommandRepository } from './comment/repositories/comment.command.repository';
 import { CommentService } from './comment/comment.service';
 import { CommentController } from './comment/comment.controller';
+import { AuthService } from './auth/auth.service';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './auth/const/auth.const';
+import { LocalStrategy } from './auth/strategies/local.strategy';
+import { JwtStrategy } from './auth/strategies/jwt.strategy';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
     imports: [
@@ -37,13 +43,20 @@ import { CommentController } from './comment/comment.controller';
             { name: Post.name, schema: PostSchema },
             { name: Comment.name, schema: CommentSchema },
         ]),
+        JwtModule.register({
+            secret: jwtConstants.secret,
+            signOptions: { expiresIn: '60s' },
+        }),
     ],
-    controllers: [UserController, BlogController, PostController, CommentController, TestController],
+    controllers: [UserController, BlogController, PostController, CommentController, AuthController, TestController],
     providers: [
+        // services
+        AuthService,
         UserService,
         BlogService,
         PostService,
         CommentService,
+        // Repositories
         BlogCommandRepository,
         BlogQueryRepository,
         UserQueryRepository,
@@ -53,6 +66,9 @@ import { CommentController } from './comment/comment.controller';
         CommentQueryRepository,
         CommentCommandRepository,
         TestRepository,
+        //   strategies
+        LocalStrategy,
+        JwtStrategy,
     ],
 })
 export class AppModule {}

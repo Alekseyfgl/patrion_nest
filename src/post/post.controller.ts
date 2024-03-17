@@ -8,7 +8,7 @@ import { PostService } from './post.service';
 import { PostQueryRepository } from './repositories/post.query.repository';
 import { PostDocument } from './post.schema';
 import { postMapper } from './post.mapper';
-import { CustomBadReqException } from '../common/http-exceptions/custom-http-exeption';
+import { CustomReqException } from '../common/http-exceptions/custom-http-exeption';
 import { CommentsByPostQuery } from '../comment/interfaces/input';
 import { ICommentPaginationOut } from '../comment/interfaces/output';
 import { CommentQueryRepository } from '../comment/repositories/comment.query.repository';
@@ -25,7 +25,7 @@ export class PostController {
     @HttpCode(HttpStatus.CREATED)
     async createPost(@Body() dto: AddPostDto): Promise<IPost> {
         const createdPost: Nullable<PostDocument> = await this.postService.create(dto);
-        if (!createdPost) throw new CustomBadReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessagesConst.BAD_REQUEST);
+        if (!createdPost) throw new CustomReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessagesConst.BAD_REQUEST);
         return postMapper(createdPost);
     }
 
@@ -33,7 +33,7 @@ export class PostController {
     @HttpCode(HttpStatus.OK)
     async getById(@Param('id') id: string): Promise<IPost> {
         const post: Nullable<PostDocument> = await this.postQueryRepository.findById(id);
-        if (!post) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
+        if (!post) throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
         return postMapper(post);
     }
 
@@ -48,21 +48,21 @@ export class PostController {
     @HttpCode(HttpStatus.NO_CONTENT)
     async updateById(@Body() dto: UpdatePostDto, @Param('id') id: string) {
         const isUpdated: boolean = await this.postService.updateById(id, dto);
-        if (!isUpdated) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
+        if (!isUpdated) throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async removeById(@Param('id') id: string) {
         const isRemoved: boolean = await this.postService.removeById(id);
-        if (!isRemoved) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
+        if (!isRemoved) throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
     }
 
     @Get(':id/comments')
     @HttpCode(HttpStatus.OK)
     async getAllCommentsByPostId(@Param('id') postId: string, query: CommentsByPostQuery) {
         const result: Nullable<ICommentPaginationOut> = await this.commentQueryRepository.getAllCommentsByPostId(postId, query);
-        if (!result) throw new CustomBadReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
+        if (!result) throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
 
         return result;
     }

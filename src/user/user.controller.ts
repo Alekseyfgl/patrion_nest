@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegistrationUserDto, UserPaginationQuery } from './interfeces/input';
 import { UserQueryRepository } from './repositories/user.query.repository';
@@ -7,10 +7,9 @@ import { IUser, IUserPaginationOut } from './interfeces/output';
 import { Nullable } from '../common/interfaces/optional.types';
 import { UserDocument } from './user.schema';
 import { HttpExceptionMessagesConst } from '../common/constans/http-exception-messages.const';
-import { CustomBadReqException } from '../common/http-exceptions/custom-http-exeption';
-import { AuthGuard } from '../auth/auth.guard';
+import { CustomReqException } from '../common/http-exceptions/custom-http-exeption';
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('users')
 export class UserController {
     constructor(
@@ -22,7 +21,7 @@ export class UserController {
     @HttpCode(HttpStatus.CREATED)
     async createUser(@Body() dto: RegistrationUserDto): Promise<IUser> {
         const newUser: Nullable<UserDocument> = await this.userService.create(dto);
-        if (!newUser) throw new CustomBadReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessagesConst.BAD_REQUEST);
+        if (!newUser) throw new CustomReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessagesConst.BAD_REQUEST);
         return userMapper(newUser);
     }
 

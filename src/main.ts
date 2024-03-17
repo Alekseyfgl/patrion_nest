@@ -17,7 +17,11 @@ async function bootstrap() {
     app.useGlobalPipes(
         new ValidationPipe({
             stopAtFirstError: false,
+            whitelist: true,
+            transform: true,
+            forbidNonWhitelisted: true,
             exceptionFactory: (errors) => {
+                console.log('exceptionFactory===>>>');
                 const errorMessages = errors.map((e) => ({
                     field: e.property,
                     message: Object.values(e.constraints as any)[0], // Берем первое сообщение об ошибке
