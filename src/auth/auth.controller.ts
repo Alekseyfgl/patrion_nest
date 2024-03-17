@@ -1,9 +1,10 @@
 import { Controller, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { LocalAuthGuard } from './guards/password-js/local-auth.guard';
+import { JwtAuthGuard } from './guards/password-js/jwt-auth.guard';
 import { UserSession } from './decorators/session-user.decorator';
 import { IUserSession } from './interfeces/output';
+import { BasicAuthGuard } from './guards/password-js/basic-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,5 +23,12 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     async jwt_login(@UserSession() userSession: IUserSession) {
         return userSession;
+    }
+
+    @UseGuards(BasicAuthGuard)
+    @Post('for-sa')
+    @HttpCode(HttpStatus.OK)
+    async basic_login() {
+        return { ok: true };
     }
 }
