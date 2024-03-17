@@ -1,7 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { IUserSession } from '../interfeces/output';
 
-export const UserSession = createParamDecorator((key: string, ctx: ExecutionContext) => {
+export const UserSession = createParamDecorator((key: keyof IUserSession, ctx: ExecutionContext): IUserSession | string => {
     const request = ctx.switchToHttp().getRequest();
-    const userSession = request.user;
+    const userSession: IUserSession = request.user;
     return key ? userSession?.[key] : userSession;
 });

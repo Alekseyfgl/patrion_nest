@@ -11,9 +11,9 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
     constructor(
-        private userQueryRepository: UserQueryRepository,
+        private readonly userQueryRepository: UserQueryRepository,
         private readonly jwtService: JwtService,
-        private configService: ConfigService,
+        private readonly configService: ConfigService,
     ) {}
 
     async validateUser(username: string, pass: string): PromiseNull<IUser> {

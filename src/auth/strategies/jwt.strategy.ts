@@ -11,7 +11,7 @@ import { HttpExceptionMessagesConst } from '../../common/constans/http-exception
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(private userQueryRepository: UserQueryRepository) {
+    constructor(private readonly userQueryRepository: UserQueryRepository) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
