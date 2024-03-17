@@ -2,10 +2,9 @@ import { Controller, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nes
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { SessionUser } from './decorators/session-user.decorator';
+import { UserSession } from './decorators/session-user.decorator';
 import { IUserSession } from './interfeces/output';
 
-// @UseGuards(AuthGuard)
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
@@ -21,7 +20,7 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @Post('jwt_login')
     @HttpCode(HttpStatus.OK)
-    async jwt_login(@SessionUser() sessionUser: IUserSession) {
-        return sessionUser;
+    async jwt_login(@UserSession() userSession: IUserSession) {
+        return userSession;
     }
 }
