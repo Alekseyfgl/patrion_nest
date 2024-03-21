@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 
 import { Nullable } from '../common/interfaces/optional.types';
 import { AddPostDto, PostsByBlogQuery, UpdatePostDto } from './interfaces/input';
@@ -12,6 +12,7 @@ import { CustomReqException } from '../common/http-exceptions/custom-http-exepti
 import { CommentsByPostQuery } from '../comment/interfaces/input';
 import { ICommentPaginationOut } from '../comment/interfaces/output';
 import { CommentQueryRepository } from '../comment/repositories/comment.query.repository';
+import { BasicAuthGuard } from '../auth/guards/password-js/basic-auth.guard';
 
 @Controller('posts')
 export class PostController {
@@ -21,6 +22,7 @@ export class PostController {
         private readonly commentQueryRepository: CommentQueryRepository,
     ) {}
 
+    @UseGuards(BasicAuthGuard)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async createPost(@Body() dto: AddPostDto): Promise<IPost> {
@@ -44,6 +46,7 @@ export class PostController {
         return posts;
     }
 
+    @UseGuards(BasicAuthGuard)
     @Put(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async updateById(@Body() dto: UpdatePostDto, @Param('id') id: string) {
@@ -51,6 +54,7 @@ export class PostController {
         if (!isUpdated) throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
     }
 
+    @UseGuards(BasicAuthGuard)
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async removeById(@Param('id') id: string) {

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 
 import { Nullable } from '../common/interfaces/optional.types';
 import { BlogService } from './blog.service';
@@ -14,6 +14,7 @@ import { postMapper } from '../post/post.mapper';
 import { IPost, IPostModelOut } from '../post/interfaces/output';
 import { PostQueryRepository } from '../post/repositories/post.query.repository';
 import { CustomReqException } from '../common/http-exceptions/custom-http-exeption';
+import { BasicAuthGuard } from '../auth/guards/password-js/basic-auth.guard';
 
 @Controller('blogs')
 export class BlogController {
@@ -29,6 +30,7 @@ export class BlogController {
         return this.blogQueryRepository.findAll(query);
     }
 
+    @UseGuards(BasicAuthGuard)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async addBlogByOne(@Body() dto: AddBlogDto): Promise<IBlog> {
@@ -45,6 +47,7 @@ export class BlogController {
         return blog;
     }
 
+    @UseGuards(BasicAuthGuard)
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async removeBlogById(@Param('id') id: string): Promise<void> {
@@ -52,18 +55,18 @@ export class BlogController {
         if (!isRemoved) throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
     }
 
+    @UseGuards(BasicAuthGuard)
     @Put(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async updateBlogById(@Param('id') id: string, @Body() dto: UpdateBlogDto): Promise<void> {
         const isUpdated: boolean = await this.blogService.updateById(id, dto);
         if (!isUpdated) throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
     }
-
+    @UseGuards(BasicAuthGuard)
     @Post(':id/posts')
     @HttpCode(HttpStatus.CREATED)
     async createPostToBlog(@Body() dto: IPostToBlogDto, @Param('id') id: string): Promise<IPost> {
         const createdPost: Nullable<PostDocument> = await this.blogService.createPostToBlog(id, dto);
-        console.log('createdPost', createdPost);
         if (!createdPost) {
             throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
             // throw new BadRequestException([{ message: HttpExceptionMessagesConst.NOT_FOUND, field: '' }]); You can use the same

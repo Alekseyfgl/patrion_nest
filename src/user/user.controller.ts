@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegistrationUserDto, UserPaginationQuery } from './interfeces/input';
 import { UserQueryRepository } from './repositories/user.query.repository';
@@ -8,6 +8,7 @@ import { Nullable } from '../common/interfaces/optional.types';
 import { UserDocument } from './user.schema';
 import { HttpExceptionMessagesConst } from '../common/constans/http-exception-messages.const';
 import { CustomReqException } from '../common/http-exceptions/custom-http-exeption';
+import { BasicAuthGuard } from '../auth/guards/password-js/basic-auth.guard';
 
 // @UseGuards(AuthGuard)
 @Controller('users')
@@ -17,6 +18,7 @@ export class UserController {
         private readonly userQueryRepository: UserQueryRepository,
     ) {}
 
+    @UseGuards(BasicAuthGuard)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async createUser(@Body() dto: RegistrationUserDto): Promise<IUser> {
@@ -31,6 +33,7 @@ export class UserController {
         return this.userQueryRepository.findAll(inputQuery);
     }
 
+    @UseGuards(BasicAuthGuard)
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async delete(@Param('id') userId: string): Promise<void> {
