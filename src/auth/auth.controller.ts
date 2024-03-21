@@ -6,12 +6,14 @@ import { UserSession } from './decorators/session-user.decorator';
 import { IUserSession } from './interfeces/output';
 import { BasicAuthGuard } from './guards/password-js/basic-auth.guard';
 import { LoggerService } from '../common/logger/logger.service';
+import { ExceptionsService } from '../common/http-exceptions-service/exeption.service';
 
 @Controller('auth')
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
         private readonly logger: LoggerService,
+        private readonly exceptionsService: ExceptionsService,
     ) {}
 
     @UseGuards(LocalAuthGuard)
@@ -33,7 +35,9 @@ export class AuthController {
     @Post('for-sa')
     @HttpCode(HttpStatus.OK)
     async basic_login() {
-        this.logger.verbose('AuthController', 'Hello world!!!');
+        throw this.exceptionsService.unauthorizedException();
+
+        this.logger.debug('AuthController', 'Hello world!!!');
         return { ok: true };
     }
 }

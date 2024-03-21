@@ -6,9 +6,8 @@ import { userMapper } from './user.mapper';
 import { IUser, IUserPaginationOut } from './interfeces/output';
 import { Nullable } from '../common/interfaces/optional.types';
 import { UserDocument } from './user.schema';
-import { HttpExceptionMessagesConst } from '../common/constans/http-exception-messages.const';
-import { CustomReqException } from '../common/http-exceptions/custom-http-exeption';
 import { BasicAuthGuard } from '../auth/guards/password-js/basic-auth.guard';
+import { ExceptionsService } from '../common/http-exceptions-service/exeption.service';
 
 // @UseGuards(AuthGuard)
 @Controller('users')
@@ -16,6 +15,7 @@ export class UserController {
     constructor(
         private readonly userService: UserService,
         private readonly userQueryRepository: UserQueryRepository,
+        protected exceptionsService: ExceptionsService,
     ) {}
 
     @UseGuards(BasicAuthGuard)
@@ -23,20 +23,20 @@ export class UserController {
     @HttpCode(HttpStatus.CREATED)
     async createUser(@Body() dto: RegistrationUserDto): Promise<IUser> {
         const newUser: Nullable<UserDocument> = await this.userService.create(dto);
-        if (!newUser) throw new CustomReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessagesConst.BAD_REQUEST);
+
+        if (!newUser) throw this.exceptionsService.internalServerErrorException();
         return userMapper(newUser);
     }
 
     @Get()
     async getAll(@Query() inputQuery: UserPaginationQuery): Promise<IUserPaginationOut> {
-        console.log(inputQuery);
         return this.userQueryRepository.findAll(inputQuery);
     }
 
     @UseGuards(BasicAuthGuard)
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async delete(@Param('id') userId: string): Promise<void> {
-        await this.userService.removeById(userId);
+    async delete(@Param('id') userId: string): Promise<boolean> {
+        return this.userService.removeById(userId);
     }
 }

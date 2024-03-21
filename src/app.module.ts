@@ -31,6 +31,7 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { AuthController } from './auth/auth.controller';
 import { HttpBasicStrategy } from './auth/strategies/basic.strategy';
 import { LoggerService } from './common/logger/logger.service';
+import { ExceptionsService } from './common/http-exceptions-service/exeption.service';
 
 @Module({
     imports: [
@@ -52,6 +53,8 @@ import { LoggerService } from './common/logger/logger.service';
     ],
     controllers: [UserController, BlogController, PostController, CommentController, AuthController, TestController],
     providers: [
+        //exeption
+        ExceptionsService,
         // services
         AuthService,
         UserService,
@@ -74,5 +77,6 @@ import { LoggerService } from './common/logger/logger.service';
         JwtStrategy,
         HttpBasicStrategy,
     ],
+    exports: [ExceptionsService],
 })
 export class AppModule {}

@@ -3,9 +3,9 @@ import { ILogger } from './loger.interface';
 
 @Injectable()
 export class LoggerService extends ConsoleLogger implements ILogger {
-    debug(context: string, message: string): void {
+    debug(context: string, message: string = '', payload?: unknown): void {
         if (process.env.NODE_ENV !== 'production') {
-            super.debug(`[DEBUG] ${message}`, { context });
+            super.debug(`[DEBUG] ${message}`, `${payload ?? ''}`, { context });
         }
     }
     verbose(context: string, message: string): void {

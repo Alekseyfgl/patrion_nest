@@ -2,18 +2,20 @@ import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
 import { CommentQueryRepository } from './repositories/comment.query.repository';
 import { IComment } from './interfaces/output';
 import { Nullable } from '../common/interfaces/optional.types';
-import { CustomReqException } from '../common/http-exceptions/custom-http-exeption';
-import { HttpExceptionMessagesConst } from '../common/constans/http-exception-messages.const';
+import { ExceptionsService } from '../common/http-exceptions-service/exeption.service';
 
 @Controller('comments')
 export class CommentController {
-    constructor(private readonly commentQueryRepository: CommentQueryRepository) {}
+    constructor(
+        private readonly commentQueryRepository: CommentQueryRepository,
+        private readonly exceptionsService: ExceptionsService,
+    ) {}
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     async getById(@Param('id') commentId: string) {
         const commentWithAuthor: Nullable<IComment> = await this.commentQueryRepository.getCommentByIdWithAuthor(commentId);
-        if (!commentWithAuthor) throw new CustomReqException(HttpStatus.NOT_FOUND, HttpExceptionMessagesConst.NOT_FOUND);
+        if (!commentWithAuthor) throw this.exceptionsService.notFoundException();
         return commentWithAuthor;
     }
 

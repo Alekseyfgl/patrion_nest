@@ -1,15 +1,17 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { AuthService } from '../auth.service';
-import { CustomReqException } from '../../common/http-exceptions/custom-http-exeption';
-import { HttpExceptionMessagesConst } from '../../common/constans/http-exception-messages.const';
 import { Nullable } from '../../common/interfaces/optional.types';
 import { IUser } from '../../user/interfeces/output';
+import { ExceptionsService } from '../../common/http-exceptions-service/exeption.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-    constructor(private readonly authService: AuthService) {
+    constructor(
+        private readonly authService: AuthService,
+        private readonly exceptionsService: ExceptionsService,
+    ) {
         super({
             usernameField: 'loginOrEmail',
             passwordField: 'password',
@@ -25,11 +27,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
      */
     async validate(loginOrEmail: string, password: string): Promise<IUser> {
         if (loginOrEmail.length < 3 || loginOrEmail.length > 10) {
-            throw new CustomReqException(HttpStatus.BAD_REQUEST, HttpExceptionMessagesConst.BAD_REQUEST);
+            throw new this.exceptionsService.badRequestException();
         }
         const user: Nullable<IUser> = await this.authService.validateUser(loginOrEmail, password);
         if (!user) {
-            throw new CustomReqException(HttpStatus.UNAUTHORIZED, HttpExceptionMessagesConst.UNAUTHORIZED);
+            throw this.exceptionsService.unauthorizedException();
         }
         return user;
     }
