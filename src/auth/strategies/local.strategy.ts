@@ -27,7 +27,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
      */
     async validate(loginOrEmail: string, password: string): Promise<IUser> {
         if (loginOrEmail.length < 3 || loginOrEmail.length > 10) {
-            throw new this.exceptionsService.badRequestException();
+            throw this.exceptionsService.badRequestException();
         }
         const user: Nullable<IUser> = await this.authService.validateUser(loginOrEmail, password);
         if (!user) {

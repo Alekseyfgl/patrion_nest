@@ -27,7 +27,7 @@ export class PostController {
     @HttpCode(HttpStatus.CREATED)
     async createPost(@Body() dto: AddPostDto): Promise<IPost> {
         const createdPost: Nullable<PostDocument> = await this.postService.create(dto);
-        if (!createdPost) throw new this.exceptionsService.badRequestException();
+        if (!createdPost) throw this.exceptionsService.badRequestException();
         return postMapper(createdPost);
     }
 
@@ -35,7 +35,7 @@ export class PostController {
     @HttpCode(HttpStatus.OK)
     async getById(@Param('id') id: string): Promise<IPost> {
         const post: Nullable<PostDocument> = await this.postQueryRepository.findById(id);
-        if (!post) throw new this.exceptionsService.notFoundException();
+        if (!post) throw this.exceptionsService.notFoundException();
         return postMapper(post);
     }
 
@@ -51,7 +51,7 @@ export class PostController {
     @HttpCode(HttpStatus.NO_CONTENT)
     async updateById(@Body() dto: UpdatePostDto, @Param('id') id: string) {
         const isUpdated: boolean = await this.postService.updateById(id, dto);
-        if (!isUpdated) throw new this.exceptionsService.notFoundException();
+        if (!isUpdated) throw this.exceptionsService.notFoundException();
     }
 
     @UseGuards(BasicAuthGuard)
@@ -59,14 +59,14 @@ export class PostController {
     @HttpCode(HttpStatus.NO_CONTENT)
     async removeById(@Param('id') id: string) {
         const isRemoved: boolean = await this.postService.removeById(id);
-        if (!isRemoved) throw new this.exceptionsService.notFoundException();
+        if (!isRemoved) throw this.exceptionsService.notFoundException();
     }
 
     @Get(':id/comments')
     @HttpCode(HttpStatus.OK)
     async getAllCommentsByPostId(@Param('id') postId: string, query: CommentsByPostQuery) {
         const result: Nullable<ICommentPaginationOut> = await this.commentQueryRepository.getAllCommentsByPostId(postId, query);
-        if (!result) throw new this.exceptionsService.notFoundException();
+        if (!result) throw this.exceptionsService.notFoundException();
 
         return result;
     }

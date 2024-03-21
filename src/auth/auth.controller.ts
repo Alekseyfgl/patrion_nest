@@ -35,7 +35,7 @@ export class AuthController {
     @Post('for-sa')
     @HttpCode(HttpStatus.OK)
     async basic_login() {
-        throw this.exceptionsService.unauthorizedException();
+        // throw this.exceptionsService.unauthorizedException();
 
         this.logger.debug('AuthController', 'Hello world!!!');
         return { ok: true };

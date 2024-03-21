@@ -24,7 +24,7 @@ export class HttpBasicStrategy extends PassportStrategy(Strategy) {
 
     private checkUser(username: string, password: string): boolean {
         const baseUserName: Optional<string> = this.configService.get<string>('BASE_USER_NAME');
-        const baseUserPassword: Optional<string> = this.configService.get<string>('BASE__USER_PASSWORD');
+        const baseUserPassword: Optional<string> = this.configService.get<string>('BASE_USER_PASSWORD');
 
         return baseUserName === username && baseUserPassword === password;
     }
