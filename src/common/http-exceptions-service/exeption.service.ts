@@ -10,20 +10,20 @@ export interface IException {
 
 @Injectable()
 export class ExceptionsService implements IException {
-    badRequestException(message = HttpExceptionMessagesConst.BAD_REQUEST, field = ''): void {
+    badRequestException(message = HttpExceptionMessagesConst.BAD_REQUEST, field = '') {
         throw new BadRequestException({ errorsMessages: [{ message, field }] });
     }
-    internalServerErrorException(message = HttpExceptionMessagesConst.INTERNAL_SERVER_ERROR, field = ''): void {
+    internalServerErrorException(message = HttpExceptionMessagesConst.INTERNAL_SERVER_ERROR, field = '') {
         throw new InternalServerErrorException({ errorsMessages: [{ message, field }] });
     }
-    forbiddenException(message = HttpExceptionMessagesConst.FORBIDDEN, field = ''): void {
+    forbiddenException(message = HttpExceptionMessagesConst.FORBIDDEN, field = '') {
         throw new ForbiddenException({ errorsMessages: [{ message, field }] });
     }
-    unauthorizedException(message = HttpExceptionMessagesConst.UNAUTHORIZED, field = ''): void {
+    unauthorizedException(message = HttpExceptionMessagesConst.UNAUTHORIZED, field = '') {
         throw new UnauthorizedException({ errorsMessages: [{ message, field }] });
     }
 
-    notFoundException(message = HttpExceptionMessagesConst.NOT_FOUND, field = ''): void {
+    notFoundException(message = HttpExceptionMessagesConst.NOT_FOUND, field = '') {
         throw new NotFoundException({ errorsMessages: [{ message, field }] });
     }
 }

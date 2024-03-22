@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ICustomErrors } from '../interfaces/error.interface';
+import { ICustomErrors } from '../http-exceptions-service/exception.interface';
 import { HttpExceptionMessagesConst } from '../constans/http-exception-messages.const';
 import { LoggerService } from '../logger/logger.service';
 

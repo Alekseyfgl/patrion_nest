@@ -9,6 +9,7 @@ import { Nullable } from '../../common/interfaces/optional.types';
 import { ConfigService } from '@nestjs/config';
 import { UserQueryRepository } from '../repositories/user.query.repository';
 import { IUserPaginationOut } from '../interfeces/output';
+import { SORT_DIRECTION } from '../../common/constans/sort-directions.const';
 
 describe('UserService', () => {
     let service: UserService;
@@ -74,7 +75,7 @@ describe('UserService', () => {
             const query: UserPaginationQuery = {
                 pageSize: 10,
                 pageNumber: 1,
-                sortDirection: 'asc',
+                sortDirection: SORT_DIRECTION.ASC,
                 sortBy: 'email',
                 searchEmailTerm: '',
                 searchLoginTerm: '',

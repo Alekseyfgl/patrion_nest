@@ -1,8 +1,8 @@
 export interface ICustomErrors {
-    errorsMessages: IErrorOut[];
+    errorsMessages: IErrorMessage[];
 }
 
-export interface IErrorOut {
+export interface IErrorMessage {
     message: string;
     field: string;
 }
