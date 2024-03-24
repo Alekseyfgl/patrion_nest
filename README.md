@@ -48,14 +48,14 @@ $ yarn run start:prod
 ## Test
 
 ```bash
-# unit clearDB
-$ yarn run clearDB
+# unit test-service
+$ yarn run test-service
 
-# e2e clearDB
-$ yarn run clearDB:e2e
+# e2e test-service
+$ yarn run test-service:e2e
 
-# clearDB coverage
-$ yarn run clearDB:cov
+# test-service coverage
+$ yarn run test-service:cov
 ```
 
 ## Support
