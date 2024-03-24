@@ -12,3 +12,8 @@ export interface IJwtPayload extends IJwtStandardClaims {
 }
 
 export type IUserSession = Pick<IJwtPayload, 'userId' | 'deviceId'>;
+
+export interface ITokens {
+    accessToken: string;
+    refreshToken: string;
+}

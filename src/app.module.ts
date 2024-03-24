@@ -26,7 +26,7 @@ import { CommentController } from './features/comment/comment.controller';
 
 import { JwtModule } from '@nestjs/jwt';
 
-import { LoggerService } from './common/logger/logger.service';
+import { LoggerService } from './common/services/logger/logger.service';
 import { ExceptionsService } from './common/http-exceptions-service/exeption.service';
 import { ConfirmationUser, ConfirmationUserSchema } from './features/confirmation-user/confirmation-user.schema';
 import { jwtConstants } from './features/auth/const/auth.const';
@@ -35,6 +35,7 @@ import { AuthService } from './features/auth/auth.service';
 import { LocalStrategy } from './features/auth/strategies/local.strategy';
 import { JwtStrategy } from './features/auth/strategies/jwt.strategy';
 import { HttpBasicStrategy } from './features/auth/strategies/basic.strategy';
+import { CookieModule } from './common/services/cookie/cookie.module';
 
 @Module({
     imports: [
@@ -54,6 +55,7 @@ import { HttpBasicStrategy } from './features/auth/strategies/basic.strategy';
             secret: jwtConstants.secret,
             signOptions: { expiresIn: '60s' },
         }),
+        CookieModule,
     ],
     controllers: [UserController, BlogController, PostController, CommentController, AuthController, TestController],
     providers: [
@@ -81,6 +83,6 @@ import { HttpBasicStrategy } from './features/auth/strategies/basic.strategy';
         JwtStrategy,
         HttpBasicStrategy,
     ],
-    exports: [ExceptionsService],
+    // exports: [ExceptionsService],
 })
 export class AppModule {}

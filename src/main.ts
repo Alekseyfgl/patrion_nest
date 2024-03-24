@@ -5,13 +5,15 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import ip from 'ip';
 import configDotenv from 'dotenv';
 import * as process from 'process';
-import { LoggerService } from './common/logger/logger.service';
-import { AllExceptionFilter, HttpExceptionFilter } from './common/exception-filter/custom-exception-filter';
+import { LoggerService } from './common/services/logger/logger.service';
+import { AllExceptionFilter } from './common/exception-filter/custom-exception-filter';
+import cookieParser from 'cookie-parser';
 
 configDotenv.config();
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     app.enableCors();
+    app.use(cookieParser());
 
     // Настройка глобального ValidationPipe
     app.useGlobalPipes(
@@ -34,7 +36,7 @@ async function bootstrap() {
     app.useLogger(logger);
 
     //exception filters
-    app.useGlobalFilters(new HttpExceptionFilter(logger));
+    // app.useGlobalFilters(new HttpExceptionFilter(logger));
     app.useGlobalFilters(new AllExceptionFilter(logger));
 
     await app.listen(process.env.SERVER_PORT!);

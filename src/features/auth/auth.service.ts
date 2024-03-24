@@ -7,6 +7,7 @@ import { IUser } from '../user/interfeces/output';
 import { setMilliseconds } from 'date-fns';
 import { ConfigService } from '@nestjs/config';
 import { PromiseNull } from '../../common/interfaces/optional.types';
+import { ITokens } from './interfeces/output';
 
 @Injectable()
 export class AuthService {
@@ -26,8 +27,8 @@ export class AuthService {
         return userMapper(user);
     }
 
-    async login(user: IUser) {
-        const deviceId = (+new Date()).toString();
+    async login(user: IUser): Promise<ITokens> {
+        const deviceId: string = (+new Date()).toString();
 
         const iat: number = Math.floor(+setMilliseconds(new Date(), 0) / 1000);
         const payload = { userId: user.id, deviceId, iat };
