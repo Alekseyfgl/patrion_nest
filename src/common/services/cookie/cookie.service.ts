@@ -18,8 +18,6 @@ export class CookieService {
     }
 
     removeRefreshToken(res: Response) {
-        const maxAge: string = this.configService.get<string>('REFRESH_TOKEN_EXP')!;
-
         const cookieOptions = {
             httpOnly: true,
             secure: true,
