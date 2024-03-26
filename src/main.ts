@@ -8,10 +8,14 @@ import * as process from 'process';
 import { LoggerService } from './common/services/logger/logger.service';
 import { AllExceptionFilter } from './common/exception-filter/custom-exception-filter';
 import cookieParser from 'cookie-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 configDotenv.config();
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    app.setGlobalPrefix('api');
+    // app.use('/static', express.static('public'));
+    // app.set('trust proxy', true);
     app.enableCors();
     app.use(cookieParser());
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, Request, UseGuards } from '@nestjs/common';
 
 import { Nullable } from '../../common/interfaces/optional.types';
 import { BlogService } from './blog.service';
@@ -26,7 +26,8 @@ export class BlogController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    async getAllBlogs(@Query() query: BlogQuery): Promise<IBlogPagination> {
+    async getAllBlogs(@Query() query: BlogQuery, @Request() req): Promise<IBlogPagination> {
+        console.log(req.ip);
         return this.blogQueryRepository.findAll(query);
     }
 

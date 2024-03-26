@@ -22,9 +22,11 @@ export class AuthController {
     @Post('login')
     @HttpCode(HttpStatus.OK)
     async login(@Request() req, @Res({ passthrough: true }) res) {
+        console.log(req.agent);
         const { accessToken, refreshToken }: ITokens = await this.authService.login(req.user);
 
         this.cookieService.setRefreshToken(res, refreshToken);
+
         return { accessToken };
     }
 

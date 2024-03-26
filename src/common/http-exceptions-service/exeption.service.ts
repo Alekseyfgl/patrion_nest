@@ -13,7 +13,7 @@ export class ExceptionsService implements IException {
     badRequestException(message = HttpExceptionMessagesConst.BAD_REQUEST, field = '') {
         throw new BadRequestException({ errorsMessages: [{ message, field }] });
     }
-    internalServerErrorException(message = HttpExceptionMessagesConst.INTERNAL_SERVER_ERROR, field = '') {
+    internalServerErrorException(message: string = HttpExceptionMessagesConst.INTERNAL_SERVER_ERROR, field = '') {
         throw new InternalServerErrorException({ errorsMessages: [{ message, field }] });
     }
     forbiddenException(message = HttpExceptionMessagesConst.FORBIDDEN, field = '') {

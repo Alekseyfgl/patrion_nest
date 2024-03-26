@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { UserController } from './features/user/user.controller';
 import { UserService } from './features/user/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -35,7 +35,12 @@ import { AuthService } from './features/auth/auth.service';
 import { LocalStrategy } from './features/auth/strategies/local.strategy';
 import { JwtStrategy } from './features/auth/strategies/jwt.strategy';
 import { HttpBasicStrategy } from './features/auth/strategies/basic.strategy';
-import { CookieModule } from './common/services/cookie/cookie.module';
+// import { CookieModule } from './common/services/cookie/cookie.module';
+import { ConfUserCommandRepository } from './features/confirmation-user/repositories/conf-user.command.repository';
+import { ConfUserQueryRepository } from './features/confirmation-user/repositories/conf-user.query.repository';
+import { UserAgentMiddleware } from './common/middlewares/set-agent/set-agent.middleware';
+import { CookieService } from './common/services/cookie/cookie.service';
+import { SetIpMiddleware } from './common/middlewares/set-ip/set-ip.middleware';
 
 @Module({
     imports: [
@@ -55,19 +60,20 @@ import { CookieModule } from './common/services/cookie/cookie.module';
             secret: jwtConstants.secret,
             signOptions: { expiresIn: '60s' },
         }),
-        CookieModule,
     ],
     controllers: [UserController, BlogController, PostController, CommentController, AuthController, TestController],
     providers: [
         //exeption
         ExceptionsService,
+        //common services
+        LoggerService,
+        CookieService,
         // services
         AuthService,
         UserService,
         BlogService,
         PostService,
         CommentService,
-        LoggerService,
         // Repositories
         BlogCommandRepository,
         BlogQueryRepository,
@@ -77,6 +83,8 @@ import { CookieModule } from './common/services/cookie/cookie.module';
         PostQueryRepository,
         CommentQueryRepository,
         CommentCommandRepository,
+        ConfUserCommandRepository,
+        ConfUserQueryRepository,
         TestRepository,
         //   strategies
         LocalStrategy,
@@ -85,4 +93,16 @@ import { CookieModule } from './common/services/cookie/cookie.module';
     ],
     // exports: [ExceptionsService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(UserAgentMiddleware, SetIpMiddleware)
+            .exclude(
+                { path: 'static/*', method: RequestMethod.GET }, // Исключить статические файлы
+                // ... (возможно другие пути для исключения)
+            )
+            .forRoutes(
+                { path: 'api/*', method: RequestMethod.ALL }, // Применить ко всем маршрутам
+            );
+    }
+}
