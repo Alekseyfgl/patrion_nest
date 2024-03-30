@@ -35,16 +35,17 @@ import { AuthService } from './features/auth/auth.service';
 import { LocalStrategy } from './features/auth/strategies/local.strategy';
 import { JwtStrategy } from './features/auth/strategies/jwt.strategy';
 import { HttpBasicStrategy } from './features/auth/strategies/basic.strategy';
-// import { CookieModule } from './common/services/cookie/cookie.module';
 import { ConfUserCommandRepository } from './features/confirmation-user/repositories/conf-user.command.repository';
 import { ConfUserQueryRepository } from './features/confirmation-user/repositories/conf-user.query.repository';
 import { UserAgentMiddleware } from './common/middlewares/set-agent/set-agent.middleware';
 import { CookieService } from './common/services/cookie/cookie.service';
 import { SetIpMiddleware } from './common/middlewares/set-ip/set-ip.middleware';
+import { RateLimit, RateLimitSchema } from './features/rate-limit/rate-limit.schema';
+import * as process from 'process';
 
 @Module({
     imports: [
-        MongooseModule.forRoot('mongodb://localhost:27017/train_project_be_local_nest'),
+        MongooseModule.forRoot(process.env.MONGO_LOCAL!),
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: '../.env',
@@ -55,6 +56,7 @@ import { SetIpMiddleware } from './common/middlewares/set-ip/set-ip.middleware';
             { name: Post.name, schema: PostSchema },
             { name: Comment.name, schema: CommentSchema },
             { name: ConfirmationUser.name, schema: ConfirmationUserSchema },
+            { name: RateLimit.name, schema: RateLimitSchema },
         ]),
         JwtModule.register({
             secret: jwtConstants.secret,
