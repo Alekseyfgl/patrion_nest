@@ -1,6 +1,4 @@
-export const createMsgEnv = (property: string): string => {
-    return `Property - ${property} from env not found!`;
-};
+export const createMsgEnv = (property: string): string => `Property - ${property} from env not found!`;
 
 export const enum ENV {
     NODE_ENV = 'NODE_ENV',
