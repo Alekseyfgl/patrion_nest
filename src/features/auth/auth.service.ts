@@ -5,16 +5,16 @@ import bcrypt from 'bcrypt';
 import { userMapper } from '../user/user.mapper';
 import { IUser } from '../user/interfeces/output';
 import { setMilliseconds } from 'date-fns';
-import { ConfigService } from '@nestjs/config';
 import { PromiseNull } from '../../common/interfaces/optional.types';
 import { ITokens } from './interfeces/output';
+import { EnvConfigService } from '../../common/services/env-config/env.config.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly userQueryRepository: UserQueryRepository,
         private readonly jwtService: JwtService,
-        private readonly configService: ConfigService,
+        private readonly envConfigService: EnvConfigService,
     ) {}
 
     async validateUser(username: string, pass: string): PromiseNull<IUser> {
@@ -33,8 +33,8 @@ export class AuthService {
         const iat: number = Math.floor(+setMilliseconds(new Date(), 0) / 1000);
         const payload = { userId: user.id, deviceId, iat };
 
-        const accessExpInSec = this.configService.get<string>('ACCESS_TOKEN_EXP');
-        const refreshExpInSec = this.configService.get<string>('REFRESH_TOKEN_EXP');
+        const accessExpInSec = this.envConfigService.getAccessTokenExp();
+        const refreshExpInSec = this.envConfigService.getRefreshTokenExp();
 
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(payload, { expiresIn: accessExpInSec }),

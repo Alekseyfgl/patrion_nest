@@ -1,13 +1,13 @@
 import { Response } from 'express';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { COOKIE_NAME } from '../../constans/cookie.const';
+import { EnvConfigService } from '../env-config/env.config.service';
 
 @Injectable()
 export class CookieService {
-    constructor(private readonly configService: ConfigService) {}
+    constructor(private readonly envConfigService: EnvConfigService) {}
     setRefreshToken(res: Response, refreshToken: string) {
-        const maxAge: string = this.configService.get<string>('REFRESH_TOKEN_EXP')!;
+        const maxAge: string = this.envConfigService.getRefreshTokenExp();
 
         const cookieOptions = {
             httpOnly: true,

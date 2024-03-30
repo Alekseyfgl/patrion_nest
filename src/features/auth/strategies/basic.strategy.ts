@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { BasicStrategy as Strategy } from 'passport-http';
-import { ConfigService } from '@nestjs/config';
 import { ExceptionsService } from '../../../common/http-exceptions-service/exeption.service';
 import { Optional } from '../../../common/interfaces/optional.types';
+import { EnvConfigService } from '../../../common/services/env-config/env.config.service';
 
 @Injectable()
 export class HttpBasicStrategy extends PassportStrategy(Strategy) {
     constructor(
-        private readonly configService: ConfigService,
+        private readonly envConfigService: EnvConfigService,
         private readonly exceptionsService: ExceptionsService,
     ) {
         super();
@@ -23,8 +23,8 @@ export class HttpBasicStrategy extends PassportStrategy(Strategy) {
     }
 
     private checkUser(username: string, password: string): boolean {
-        const baseUserName: Optional<string> = this.configService.get<string>('BASE_USER_NAME');
-        const baseUserPassword: Optional<string> = this.configService.get<string>('BASE_USER_PASSWORD');
+        const baseUserName: Optional<string> = this.envConfigService.getSuperAdminName();
+        const baseUserPassword: Optional<string> = this.envConfigService.getSuperAdminPass();
 
         return baseUserName === username && baseUserPassword === password;
     }

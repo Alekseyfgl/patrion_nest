@@ -42,12 +42,13 @@ import { CookieService } from './common/services/cookie/cookie.service';
 import { SetIpMiddleware } from './common/middlewares/set-ip/set-ip.middleware';
 import { RateLimit, RateLimitSchema } from './features/rate-limit/rate-limit.schema';
 import * as process from 'process';
+import { EnvConfigService } from './common/services/env-config/env.config.service';
 
 @Module({
     imports: [
         MongooseModule.forRoot(process.env.MONGO_LOCAL!),
         ConfigModule.forRoot({
-            isGlobal: true,
+            isGlobal: false,
             envFilePath: '../.env',
         }),
         MongooseModule.forFeature([
@@ -65,6 +66,8 @@ import * as process from 'process';
     ],
     controllers: [UserController, BlogController, PostController, CommentController, AuthController, TestController],
     providers: [
+        //env
+        EnvConfigService,
         //exeption
         ExceptionsService,
         //common services
@@ -101,7 +104,6 @@ export class AppModule implements NestModule {
             .apply(UserAgentMiddleware, SetIpMiddleware)
             .exclude(
                 { path: 'static/*', method: RequestMethod.GET }, // Исключить статические файлы
-                // ... (возможно другие пути для исключения)
             )
             .forRoutes(
                 { path: 'api/*', method: RequestMethod.ALL }, // Применить ко всем маршрутам
