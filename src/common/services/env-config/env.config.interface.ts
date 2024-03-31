@@ -4,6 +4,7 @@ export interface DatabaseConfig {
     getSuperAdminName(): string;
     getSuperAdminPass(): string;
     //main server
+    getServerHost(): string;
     getServerPort(): string;
     getSaltRounds(): string;
     getJwtSecret(): string;

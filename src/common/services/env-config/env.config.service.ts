@@ -44,6 +44,14 @@ export class EnvConfigService implements DatabaseConfig {
         return value;
     }
 
+    getServerHost(): string {
+        const env = ENV.SERVER_HOST;
+        const value: Optional<ENV> = this.configService.get<ENV>(env);
+        if (!value) throw this.exceptionsService.internalServerErrorException(createMsgEnv(env), env);
+
+        return value;
+    }
+
     getSaltRounds(): string {
         const env = ENV.SALT_ROUNDS;
         const value: Optional<ENV> = this.configService.get<ENV>(env);
